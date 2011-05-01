@@ -30,8 +30,42 @@ En lugar de un
 $persona = new Persona;
 $this->db->where('id', $id);
 $this->db->update('persona', $persona);
-Si lo notas trabajamos con objetos, no con peticiones recurrentes a la BD. Lo cual nos hace la vida más facil
+Si lo notas trabajamos con objetos, no con peticiones recurrentes a la BD. Lo cual nos hace la vida más fácil
 
+Es importante que tambien reescribas tus Modelos con el siguiente modelo de constructor:
 
+/* Persona_model.php */
+class Persona_model extends EX_Model{
+
+        /*
+         * Nuevo constructor para aprovechar las ventajas de la nueva clase
+        */
+        public function __construct( $id = NULL )
+        {
+                $fields = array();
+                $fields['nombre']         =       NULL;
+                $fields['apellido']        =       NULL;
+                
+                parent::set_params( $fields );
+                parent::__construct();
+                
+                if( $id )
+                {
+                        $this->db->where( 'id', $id );
+                        $query = $this->db->get( $this->db_table );
+                        
+                        if( $query->num_rows() != 0 )
+                        {
+                                $row = $query->row();
+                                $this->populate( $row );
+                        }
+                }
+        }
+}
 
 Leer más en http://walhez.com/?p=12666#ixzz1L4ay6Cce
+
+
+EJEMPLO :
+
+

@@ -198,32 +198,3 @@ class EX_Model extends CI_Model{
         }
         
 }
-
-/* User_model.php */
-class Persona_model extends EX_Model{
-
-        /*
-         * Nuevo constructor para aprovechar las ventajas de la nueva clase
-        */
-        public function __construct( $id = NULL )
-        {
-                $fields = array();
-                $fields['nombre']         =       NULL;
-                $fields['apellido']        =       NULL;
-                
-                parent::set_params( $fields );
-                parent::__construct();
-                
-                if( $id )
-                {
-                        $this->db->where( 'id', $id );
-                        $query = $this->db->get( $this->db_table );
-                        
-                        if( $query->num_rows() != 0 )
-                        {
-                                $row = $query->row();
-                                $this->populate( $row );
-                        }
-                }
-        }
-}
